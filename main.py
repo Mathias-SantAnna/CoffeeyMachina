@@ -1,3 +1,5 @@
+from art import logo
+
 MENU = {
     "espresso": {
         "ingredients": {
@@ -44,7 +46,7 @@ def process_coins():
     print("Please insert coins")
     total = int(input("How many coins of 50 cents?")) * 0.5
     total += int(input("How many coins of 1 euro?"))
-    total += int(input("How many coins of 2 euro?\n")) * 2
+    total += int(input("How many coins of 2 euro?")) * 2
     return total
 
 def is_transaction_successful(money_received, drink_cost):
@@ -60,10 +62,17 @@ def is_transaction_successful(money_received, drink_cost):
         print("\nNot enough money. Refund processed")
         return False
 
+def make_coffee(drink_name, order_ingredients):
+    """Deduct the required ingredients from the resources"""
+    for item in order_ingredients:
+        resources[item] -= order_ingredients[item]
+    print(f"\n Here is your {drink_name.capitalize()} ☕. Enjoy!")
+
+
 is_on = True
 
 while is_on:
-
+    print(logo)
     print("\nMenu:")
     for drink in MENU:
         print(f"{drink.capitalize()}: ${MENU[drink]['cost']}")
@@ -72,7 +81,7 @@ while is_on:
     if user_request == "off":
         is_on = False
     elif user_request == "report":
-        print(f"Water: {resources['water']}ml")
+        print(f"\nWater: {resources['water']}ml")
         print(f"Milk: {resources['milk']}ml")
         print(f"Coffee: {resources['coffee']}g")
         print(f"Money: {profit}")
@@ -80,9 +89,8 @@ while is_on:
         drink = MENU[user_request]
         if is_resource_sufficient(drink["ingredients"]):
             payment = process_coins()
-            is_transaction_successful(payment, drink["cost"])
-            print(f"\n Here is your {user_request.capitalize()} coffee ☕")
-
+            if is_transaction_successful(payment, drink["cost"]):
+                make_coffee(user_request, drink["ingredients"])
 
 """
 def admin_user():
