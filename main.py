@@ -28,7 +28,7 @@ profit = 0
 
 resources = {
     "water": 900,
-    "milk": 60,
+    "milk": 600,
     "coffee": 500,
 }
 def is_resource_sufficient(order_ingredients):
@@ -38,11 +38,37 @@ def is_resource_sufficient(order_ingredients):
             return False
     return True
 
+
+def process_coins():
+    """Returns the total calculated from coins inserted"""
+    print("Please insert coins")
+    total = int(input("How many coins of 50 cents?")) * 0.5
+    total += int(input("How many coins of 1 euro?"))
+    total += int(input("How many coins of 2 euro?\n")) * 2
+    return total
+
+def is_transaction_successful(money_received, drink_cost):
+    """Return True when the payment is accepted, of False if money is insufficient."""
+    if money_received >= drink_cost:
+        change = round(money_received - drink_cost, 2)
+        if change > 0:
+            print(f"\nHere is your change: €{change}.")
+        global profit
+        profit += drink_cost
+        return True
+    else:
+        print("\nNot enough money. Refund processed")
+        return False
+
 is_on = True
 
 while is_on:
-#def user_order():
-    user_request = input(" What would you like? (espresso/latte/cappuccino): ")
+
+    print("\nMenu:")
+    for drink in MENU:
+        print(f"{drink.capitalize()}: ${MENU[drink]['cost']}")
+
+    user_request = input(" What would you like to order? Please type: ")
     if user_request == "off":
         is_on = False
     elif user_request == "report":
@@ -52,15 +78,20 @@ while is_on:
         print(f"Money: {profit}")
     else:
         drink = MENU[user_request]
-        is_resource_sufficient(drink["ingredients"])
+        if is_resource_sufficient(drink["ingredients"]):
+            payment = process_coins()
+            is_transaction_successful(payment, drink["cost"])
+            print(f"\n Here is your {user_request.capitalize()} coffee ☕")
 
 
 """
 def admin_user():
-    admin_user_request = input(" What would you like to do?: 'report' 'machine maintenance'. ")
-    if user_request == "machine maintenance":
+    admin_user_request = input(" What would you like to do?: 'report' 'machine maintenance' 'turn machine off'. ")
+    if user_request == "turn machine off":
         is_on = False
     elif user_request == "report":
         print(resources)
+    else:
+        print("machine maintenance started, please wait until is finished.")
 """
 #TODO: CREATE 2 DIFFERENT USERS: ADMIN AND CLIENT USER
