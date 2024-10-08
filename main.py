@@ -1,30 +1,9 @@
+from menu import Menu, MenuItem
+from coffee_maker import CoffeeMaker
+from money_machine import MoneyMachine
+
 from art import logo
 
-MENU = {
-    "espresso": {
-        "ingredients": {
-            "water": 50,
-            "coffee": 18,
-        },
-        "cost": 1.5,
-    },
-    "latte": {
-        "ingredients": {
-            "water": 200,
-            "milk": 150,
-            "coffee": 24,
-        },
-        "cost": 2.5,
-    },
-    "cappuccino": {
-        "ingredients": {
-            "water": 250,
-            "milk": 100,
-            "coffee": 24,
-        },
-        "cost": 3.0,
-    }
-}
 
 profit = 0
 
@@ -39,35 +18,6 @@ def is_resource_sufficient(order_ingredients):
             print("Sorry there is not enough", item)
             return False
     return True
-
-
-def process_coins():
-    """Returns the total calculated from coins inserted"""
-    print("Please insert coins")
-    total = int(input("How many coins of 50 cents?")) * 0.5
-    total += int(input("How many coins of 1 euro?"))
-    total += int(input("How many coins of 2 euro?")) * 2
-    return total
-
-def is_transaction_successful(money_received, drink_cost):
-    """Return True when the payment is accepted, of False if money is insufficient."""
-    if money_received >= drink_cost:
-        change = round(money_received - drink_cost, 2)
-        if change > 0:
-            print(f"\nHere is your change: €{change}.")
-        global profit
-        profit += drink_cost
-        return True
-    else:
-        print("\nNot enough money. Refund processed")
-        return False
-
-def make_coffee(drink_name, order_ingredients):
-    """Deduct the required ingredients from the resources"""
-    for item in order_ingredients:
-        resources[item] -= order_ingredients[item]
-    print(f"\n Here is your {drink_name.capitalize()} ☕. Enjoy!")
-
 
 is_on = True
 
